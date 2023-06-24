@@ -83,7 +83,8 @@ function CentileChart({
     styles,
     enableExport,
     exportChartCallback,
-    clinicianFocus
+    clinicianFocus,
+    showCentileLabels
 }: CentileChartProps) {
     const [userDomains, setUserDomains] = useState(null);
 
@@ -432,6 +433,15 @@ function CentileChart({
                                                     padding={{ top: 20, bottom: 20 }}
                                                     data={centile.data}
                                                     style={styles.dashedCentile}
+                                                    labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? centile.centile : null}
+                                                        labelComponent={
+                                                            <VictoryLabel 
+                                                                renderInPortal dy={-5}
+                                                                style={{...styles.centileLabel}}
+                                                                backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
+                                                                backgroundPadding={3}
+                                                            />
+                                                        }
                                                 />
                                             );
                                         } else {
@@ -443,6 +453,15 @@ function CentileChart({
                                                     padding={{ top: 20, bottom: 20 }}
                                                     data={centile.data}
                                                     style={styles.continuousCentile}
+                                                    labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? centile.centile : null}
+                                                        labelComponent={
+                                                            <VictoryLabel 
+                                                                renderInPortal dy={-5}
+                                                                style={{...styles.centileLabel}}
+                                                                backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
+                                                                backgroundPadding={3}
+                                                            />
+                                                        }
                                                 />
                                             );
                                         }
@@ -473,6 +492,15 @@ function CentileChart({
                                                         padding={{ top: 20, bottom: 20 }}
                                                         data={sdsLine.data}
                                                         style={styles.sdsLine}
+                                                        labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? sdsLine.sds : null}
+                                                        labelComponent={
+                                                            <VictoryLabel 
+                                                                renderInPortal dy={-5}
+                                                                style={{...styles.centileLabel}}
+                                                                backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
+                                                                backgroundPadding={3}
+                                                            />
+                                                        }
                                                     />
                                                 );
                                             

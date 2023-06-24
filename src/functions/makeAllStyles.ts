@@ -174,6 +174,12 @@ function makeAllStyles(
                 strokeLinecap: 'round',
             },
         },
+        centileLabel: {
+            fontSize: 6,
+            fill: chartStyle?.tooltipTextStyle?.colour ?? black,
+            fontFamily: axisStyle?.axisLabelTextStyle?.name ?? 'Arial',
+            backgroundFill: centileStyle?.delayedPubertyAreaFill ?? midGrey
+        },
         heightSDS: {
             data: {
                 stroke: sdsStyle?.heightStroke ?? setOpacity(centileStyle?.centileStroke ?? black, 1.0),

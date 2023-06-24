@@ -38,7 +38,8 @@ const RCPCHChart: React.FC<RCPCHChartProps> = ({
     chartType,
     enableExport,
     exportChartCallback,
-    clinicianFocus
+    clinicianFocus,
+    showCentileLabels=false
 }) => {
     const styles = makeAllStyles(chartStyle, axisStyle, gridlineStyle, centileStyle, sdsStyle, measurementStyle);
     
@@ -69,6 +70,7 @@ const RCPCHChart: React.FC<RCPCHChartProps> = ({
                     enableExport={enableExport}
                     exportChartCallback={exportChartCallback}
                     clinicianFocus={clinicianFocus}
+                    showCentileLabels={showCentileLabels}
                 />
             </ErrorBoundary>
         );
