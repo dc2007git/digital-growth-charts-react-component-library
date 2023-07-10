@@ -159,6 +159,12 @@ function makeAllStyles(
                 strokeDasharray: '5 5',
             }
         },
+        sdsLineLabel: {
+            fontSize: 8,
+            fill: centileStyle?.sdsStroke ?? '#A9A9A9',
+            fontFamily: axisStyle?.axisLabelTextStyle?.name ?? 'Arial',
+            backgroundFill: 'white'//centileStyle?.delayedPubertyAreaFill ?? midGrey
+        },
         dashedCentile: {
             data: {
                 stroke: centileStyle?.centileStroke ?? black,
@@ -175,10 +181,10 @@ function makeAllStyles(
             },
         },
         centileLabel: {
-            fontSize: 6,
-            fill: chartStyle?.tooltipTextStyle?.colour ?? black,
+            fontSize: 8,
+            fill: centileStyle?.centileStroke ?? black,
             fontFamily: axisStyle?.axisLabelTextStyle?.name ?? 'Arial',
-            backgroundFill: centileStyle?.delayedPubertyAreaFill ?? midGrey
+            backgroundFill: 'white'//centileStyle?.delayedPubertyAreaFill ?? midGrey
         },
         heightSDS: {
             data: {

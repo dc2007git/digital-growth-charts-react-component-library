@@ -24,6 +24,8 @@ import defaultToggles from '../functions/defaultToggles';
 import { tooltipText } from '../functions/tooltips';
 import { delayedPubertyThreshold, makePubertyThresholds, lowerPubertyBorder } from '../functions/DelayedPuberty';
 import { getFilteredMidParentalHeightData } from '../functions/getFilteredMidParentalHeightData';
+import { angleForCentile } from '../functions/angleForCentile';
+import { labelThresholds } from '../functions/labelThresholds';
 
 // interfaces & props
 import { CentileChartProps } from './CentileChart.types';
@@ -60,6 +62,8 @@ import { ChartContainer } from '../SubComponents/ChartContainer';
 import { FullScreenIcon } from '../SubComponents/FullScreenIcon';
 import { CloseFullScreenIcon } from '../SubComponents/CloseFullScreenIcon';
 import { ResetZoomContainer } from '../SubComponents/ResetZoomContainer';
+import addOrdinalSuffix from '../functions/addOrdinalSuffix';
+import { distanceFromEndOfArray } from '../functions/distanceFromEndOfArray';
 
 // allows two top level containers: zoom and voronoi
 const VictoryZoomVoronoiContainer = createContainer<VictoryZoomContainerProps, VictoryVoronoiContainerProps>(
@@ -109,13 +113,7 @@ function CentileChart({
         [storedChildMeasurements, sex, measurementMethod, reference, showCorrectedAge, showChronologicalAge],
     );
 
-    const updatedData = useMemo(() => getVisibleData(sex, measurementMethod, reference, userDomains), [
-        sex,
-        measurementMethod,
-        reference,
-        userDomains,
-    ]);
-
+    
     
     const allowZooming = storedChildMeasurements.length > 0 && enableZoom ? true : false;
     
@@ -413,17 +411,29 @@ function CentileChart({
                     {/* 1 for each centile, 1 for the shaded area, 1 at 2years to indicate children are measured standing leading */}
                     {/* to a step down in height weight and bmi in the data set. There is another tool tip at 4 years to indicate transition from datasets. */}
 
+
                     {centileData &&
                         centileData.map((referenceData, index) => {
+                            // This identifies the last element in the centile series, so a label can be added for that centile line
+                            let oldestReferenceDataIndex:number=null;
+                            let oldestCentileDataIndex:number=null;
+                            if(referenceData[index].data.length>2){
+                                const finalElement = referenceData[index].data.at(-1);
+                                if(Math.trunc(finalElement.x) == Math.trunc(domains.x[1])){
+                                    oldestReferenceDataIndex = index;
+                                    oldestCentileDataIndex = referenceData[oldestReferenceDataIndex].data.length-1;
+                                }
+                            }
+
                             return (
                                 <VictoryGroup 
                                     key={'centileDataBlock' + index}
                                     name='centileLineGroup'
                                 >
                                     {referenceData.map((centile: ICentile, centileIndex: number) => {
-                                        
+
                                         // BMI charts also have SDS lines at -5, -4, -3, -2, 2, 3, 4, 5
-                                        
+
                                         if (centileIndex % 2 === 0) {
                                             // even index - centile is dashed
                                             return (
@@ -433,15 +443,31 @@ function CentileChart({
                                                     padding={{ top: 20, bottom: 20 }}
                                                     data={centile.data}
                                                     style={styles.dashedCentile}
-                                                    labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? centile.centile : null}
-                                                        labelComponent={
-                                                            <VictoryLabel 
-                                                                renderInPortal dy={-5}
-                                                                style={{...styles.centileLabel}}
-                                                                backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
-                                                                backgroundPadding={3}
-                                                            />
+                                                    labels={({datum})=> {
+                                                        /* If the upper domain is less than 4y, the penultimate element in the centile data array is the ideal place 
+                                                         for the label. If less than 11, 4th from the end is the best place and otherwise 5th from the end */
+                                                        if (oldestReferenceDataIndex !=null && oldestCentileDataIndex != null){
+                                                            const arrayIndex = distanceFromEndOfArray(domains);
+                                                            if(datum.x==referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex].x && showCentileLabels){
+                                                                return addOrdinalSuffix(centile.centile)
+                                                            }
                                                         }
+                                                        return null;
+                                                    }}
+                                                    labelComponent={
+                                                        <VictoryLabel 
+                                                            renderInPortal={false}
+                                                            dy={0}
+                                                            style={{...styles.centileLabel}}
+                                                            backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
+                                                            backgroundPadding={3}
+                                                            textAnchor={'start'}
+                                                            angle={({datum, data})=> {
+                                                                const arrayIndex = distanceFromEndOfArray(domains);
+                                                                return angleForCentile(referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex], referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex])
+                                                            }}
+                                                        />
+                                                    }
                                                 />
                                             );
                                         } else {
@@ -453,13 +479,29 @@ function CentileChart({
                                                     padding={{ top: 20, bottom: 20 }}
                                                     data={centile.data}
                                                     style={styles.continuousCentile}
-                                                    labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? centile.centile : null}
+                                                    labels={({datum})=> {
+                                                        /* If the upper domain is less than 4y, the penultimate element in the centile data array is the ideal place 
+                                                         for the label. If less than 11, 4th from the end is the best place and otherwise 5th from the end */
+                                                        if (oldestReferenceDataIndex !=null && oldestCentileDataIndex != null){
+                                                            const arrayIndex = distanceFromEndOfArray(domains);
+                                                            if(datum.x==referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex].x && showCentileLabels){
+                                                                return addOrdinalSuffix(centile.centile)
+                                                            }
+                                                        }
+                                                        return null;
+                                                    }}
                                                         labelComponent={
                                                             <VictoryLabel 
-                                                                renderInPortal dy={-5}
+                                                                renderInPortal = {false}
+                                                                dy={0}
                                                                 style={{...styles.centileLabel}}
                                                                 backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
                                                                 backgroundPadding={3}
+                                                                textAnchor={'start'}
+                                                                angle={({datum, data})=> {
+                                                                    const arrayIndex = distanceFromEndOfArray(domains);
+                                                                    return angleForCentile(referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex], referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex])
+                                                                }}
                                                             />
                                                         }
                                                 />
@@ -492,11 +534,13 @@ function CentileChart({
                                                         padding={{ top: 20, bottom: 20 }}
                                                         data={sdsLine.data}
                                                         style={styles.sdsLine}
-                                                        labels={({datum})=> (datum.x >= domains?.x[1]-1 && datum.x < domains?.x[1]-0.9 && showCentileLabels) ? sdsLine.sds : null}
+                                                        labels={({datum,data})=> (labelThresholds(domains.x[1], datum.x, data) && showCentileLabels) ? sdsLine.sds : null}
+                                                        
                                                         labelComponent={
                                                             <VictoryLabel 
-                                                                renderInPortal dy={-5}
-                                                                style={{...styles.centileLabel}}
+                                                                renderInPortal = {false}
+                                                                dy={-5}
+                                                                style={{...styles.sdsLineLabel}}
                                                                 backgroundStyle={{fill: styles.centileLabel.backgroundFill }}
                                                                 backgroundPadding={3}
                                                             />
