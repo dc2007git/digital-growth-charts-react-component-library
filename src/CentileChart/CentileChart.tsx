@@ -414,15 +414,23 @@ function CentileChart({
 
                     {centileData &&
                         centileData.map((referenceData, index) => {
-                            // This identifies the last element in the centile series, so a label can be added for that centile line
+                            /* This identifies the last element in the centile series, so a label can be added for that centile line
+                            at thresholds in datasets, the oldest dataset is selected which may only have a small number of elements in it.
+                            In those circumstances, the previous dataset is chosen.
+                            */
                             let oldestReferenceDataIndex:number=null;
                             let oldestCentileDataIndex:number=null;
-                            if(referenceData[index].data.length>2){
+                            
+                            if(referenceData[index].data.length>2 && reference=="uk-who"){
                                 const finalElement = referenceData[index].data.at(-1);
                                 if(Math.trunc(finalElement.x) == Math.trunc(domains.x[1])){
                                     oldestReferenceDataIndex = index;
                                     oldestCentileDataIndex = referenceData[oldestReferenceDataIndex].data.length-1;
                                 }
+                            } else {
+                                // reference is Trisomy-21 or Turner
+                                oldestReferenceDataIndex = 0;
+                                oldestCentileDataIndex = referenceData[oldestReferenceDataIndex].data.length-1;
                             }
 
                             return (
@@ -464,7 +472,7 @@ function CentileChart({
                                                             textAnchor={'start'}
                                                             angle={({datum, data})=> {
                                                                 const arrayIndex = distanceFromEndOfArray(domains);
-                                                                return angleForCentile(referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex], referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex])
+                                                                return angleForCentile(data[oldestCentileDataIndex-arrayIndex], data[oldestCentileDataIndex])
                                                             }}
                                                         />
                                                     }
@@ -500,7 +508,7 @@ function CentileChart({
                                                                 textAnchor={'start'}
                                                                 angle={({datum, data})=> {
                                                                     const arrayIndex = distanceFromEndOfArray(domains);
-                                                                    return angleForCentile(referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex], referenceData[oldestReferenceDataIndex].data[oldestCentileDataIndex-arrayIndex])
+                                                                    return angleForCentile(data[oldestCentileDataIndex-arrayIndex], data[oldestCentileDataIndex])
                                                                 }}
                                                             />
                                                         }

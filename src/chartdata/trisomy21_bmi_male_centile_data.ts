@@ -1550,7 +1550,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "0.4",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 16.3832
                                 }
                             ]
                         },
@@ -3096,7 +3096,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "2.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 17.5871
                                 }
                             ]
                         },
@@ -4642,7 +4642,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "9.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 19.0625
                                 }
                             ]
                         },
@@ -6188,7 +6188,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "25.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 20.9254
                                 }
                             ]
                         },
@@ -7734,7 +7734,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "50.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 23.3748
                                 }
                             ]
                         },
@@ -9280,7 +9280,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "75.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 26.7857
                                 }
                             ]
                         },
@@ -10826,7 +10826,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "91.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 32.7843
                                 }
                             ]
                         },
@@ -12372,7 +12372,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "98.0",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 41.2096
                                 }
                             ]
                         },
@@ -13918,7 +13918,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "99.6",
                                     "x": 18.8457,
-                                    "y": null
+                                    "y": 64.7847
                                 }
                             ]
                         }
