@@ -10826,7 +10826,7 @@ export const trisomy21BMIMaleCentileData: ReferenceGroup = {
                                 {
                                     "l": "91.0",
                                     "x": 18.8457,
-                                    "y": 32.7843
+                                    "y": 32.0076
                                 }
                             ]
                         },
